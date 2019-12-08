@@ -4,9 +4,9 @@ namespace App\Services\CustomerIo;
 
 use App\Models\Model;
 use GuzzleHttp\Client;
+use App\Services\CustomerIo\Entity\CustomerIoEvents;
 use App\Services\CustomerIo\Entity\CustomerIoCustomers;
 use \GuzzleHttp\Exception\GuzzleException;
-use App\Services\CustomerIo\Entity\CustomerIoEvents;
 use \App\Exceptions\InvalidResponseData;
 use \App\Exceptions\InvalidHttpRequestException;
 
@@ -23,11 +23,16 @@ class CustomerIoService
         $this->customerIoCustomers = new CustomerIoCustomers($client);
     }
 
-    /** @return CustomerIoClient */
-    public static function createDefaultClient(): CustomerIoClient
+    /**
+     * @param string $siteId
+     * @param string $apiKey
+     * @return static
+     */
+    public static function createDefault(string $siteId, string $apiKey): self
     {
-        // set your credentials instead of site_id and api_key
-        return new CustomerIoClient(new Client(), 'site_id', 'api_key');
+        $client = new CustomerIoClient(new Client(), $siteId, $apiKey);
+
+        return new self($client);
     }
 
     /**
