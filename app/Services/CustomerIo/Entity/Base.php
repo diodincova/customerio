@@ -9,34 +9,34 @@ class Base
     /** @var CustomerIoClient */
     protected $client;
 
-    public function __construct()
+    public function __construct($client)
     {
-        $this->client = new CustomerIoClient();
+        $this->client = $client;
     }
 
     /**
-     * @param null $id
+     * @param int|null $id
      * @param array $extra
      * @return string
      */
-    protected function customerPath($id = null, array $extra = [])
+    protected function customerPath(int $id = null, array $extra = []): string
     {
         return $this->generatePath('customers', $id, $extra);
     }
 
     /** @return string */
-    protected function eventPath()
+    protected function eventPath(): string
     {
         return $this->generatePath('events');
     }
 
     /**
-     * @param $prefix
-     * @param null $id
+     * @param string $prefix
+     * @param int|null $id
      * @param array $extra
      * @return string
      */
-    private function generatePath($prefix, $id = null, array $extra = [])
+    private function generatePath(string $prefix, int $id = null, array $extra = []): string
     {
         $path = [
             $prefix,

@@ -19,12 +19,11 @@ class CustomerIoClient
     /** @var string */
     private $apiKey;
 
-    public function __construct()
+    public function __construct($httpClient, string $siteId, string $apiKey)
     {
-        $this->httpClient = new Client(); //GuzzleHttp Client
-
-        $this->siteId = config('customer_io.site_id'); // change to your path
-        $this->apiKey = config('customer_io.api_key'); // change to your path
+        $this->httpClient = $httpClient;
+        $this->siteId = $siteId;
+        $this->apiKey = $apiKey;
     }
 
     /**

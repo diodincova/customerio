@@ -19,8 +19,7 @@ Get settings from your customer.io account and add it to .env file and to config
 In my case, I used the service to send a status change event of a specific entity.
 On the Customer IO side there was created a campaign for this event.
     
-    if($this->customerIoService->checkCredentials()) {
-        if($model->getOriginal('status_idx') !== $model->getAttribute('status_idx')) {
-            $this->customerIoService->addStatusChangeEvent($model);
-        }
+    $customerIoService = CustomerIoService::createDefault('site_id', 'api_key');
+    if($model->getOriginal('status_idx') !== $model->getAttribute('status_idx')) {
+        $customerIoService->addStatusChangeEvent($model);
     }
