@@ -3,6 +3,8 @@
 namespace App\Services\CustomerIo;
 
 use App\Models\Model;
+use GuzzleHttp\Client;
+use App\Services\CustomerIo\Entity\CustomerIoCustomers;
 use \GuzzleHttp\Exception\GuzzleException;
 use App\Services\CustomerIo\Entity\CustomerIoEvents;
 use \App\Exceptions\InvalidResponseData;
@@ -12,19 +14,20 @@ class CustomerIoService
 {
     /** @var CustomerIoEvents */
     private $customerIoEvents;
-    /** @var CustomerIoClient */
-    private $customerIoClient;
+    /** @var CustomerIoCustomers */
+    private $customerIoCustomers;
 
-    public function __construct(CustomerIoEvents $customerIoEvents, CustomerIoClient $customerIoClient)
+    public function __construct($client)
     {
-        $this->customerIoEvents = $customerIoEvents;
-        $this->customerIoClient = $customerIoClient;
+        $this->customerIoEvents = new CustomerIoEvents($client);
+        $this->customerIoCustomers = new CustomerIoCustomers($client);
     }
 
-    /** @return bool */
-    public function checkCredentials(): bool
+    /** @return CustomerIoClient */
+    public static function createDefaultClient(): CustomerIoClient
     {
-        return ($this->customerIoClient->getApiKey() && $this->customerIoClient->getSiteId());
+        // set your credentials instead of site_id and api_key
+        return new CustomerIoClient(new Client(), 'site_id', 'api_key');
     }
 
     /**
