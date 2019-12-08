@@ -13,10 +13,11 @@ use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
 {
-    public function testGet()
+    /**
+     * @dataProvider getProvider
+     */
+    public function testGet($testData, $testEndpoint, $responseBody, $response)
     {
-        $testData = ['Foo' => 'Bar'];
-        $testEndpoint = 'foo/bar';
         $options = [
             'auth' => ['siteId', 'apiKey'],
             'headers' => [
@@ -26,16 +27,28 @@ class ClientTest extends TestCase
             'timeout' => 5,
             'json' => $testData
         ];
-        $responseBody = '{"foo":"bar"}';
-        $response = new Response(200, [], $responseBody);
 
+        $client = $this->mockClient(['GET', CustomerIoClient::API_TRACK_URL . $testEndpoint, $options], $response);
+
+        $this->assertEquals(json_decode($responseBody), $client->get($testEndpoint, $testData));
+    }
+
+    public function getProvider()
+    {
+        return [
+            [['Foo' => 'Bar'], 'foo/bar', '{"foo":"bar"}', new Response(200, [], '{"foo":"bar"}')]
+        ];
+    }
+
+    private function mockClient($with, $willReturn)
+    {
         $httpClient = $this->getMockBuilder('GuzzleHttp\Client')->disableOriginalConstructor()->getMock();
         $client = new CustomerIoClient($httpClient, 'siteId', 'apiKey');
         $httpClient->expects($this->once())
             ->method('request')
-            ->with('GET', $client::API_TRACK_URL . $testEndpoint, $options)
-            ->willReturn($response);
+            ->with(...$with)
+            ->willReturn($willReturn);
 
-        $this->assertEquals(json_decode($responseBody), $client->get($testEndpoint, $testData));
+        return $client;
     }
 }
