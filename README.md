@@ -11,15 +11,13 @@ Composer packages
         "phpunit/phpunit": "~5.0"
     },
 
-Get settings from your customer.io account and add it to .env file and to config file
+Get settings from your customer.io account and put it here instead of site_id and api_key
 
-    'site_id' => env('CUSTOMER_IO_SITE_ID'),
-    'api_key' => env('CUSTOMER_IO_API_KEY'),
-
+    $customerIoService = CustomerIoService::createDefault('site_id', 'api_key');
+    
 In my case, I used the service to send a status change event of a specific entity.
 On the Customer IO side there was created a campaign for this event.
     
-    $customerIoService = CustomerIoService::createDefault('site_id', 'api_key');
     if($model->getOriginal('status_idx') !== $model->getAttribute('status_idx')) {
         $customerIoService->addStatusChangeEvent($model);
     }
