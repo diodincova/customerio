@@ -4,11 +4,7 @@ namespace Tests\Services\CustomerIo;
 
 use App\Services\CustomerIo\CustomerIoClient;
 use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
